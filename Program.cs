@@ -9,39 +9,46 @@ class Program{
     //public delegate void ThreadStart();
     public static void Main(){
         //задание 1
-        Program.first<string>();
+        Program.first<object>();
         // задание 2
         Console.WriteLine("Задание 2");
-        Program.two<string>();
+        Program.two<object>();
         // задание 3
         Program.third();
         // задание 4
-        Program.four<string>();
+        Program.four<object>();
         // задание 5
         List<Person> people = new List<Person>();
         Program.TouchXML(people);
+        Program.fifth();
         }
     
         
     //задание 1
     public static void first<T>(){
         List<T> L1 = new List<T>();
-        Console.WriteLine("Ввод для L1");
+        Console.WriteLine("Ввод для L1, введите -1 чтобы остановиться");
         string n = "";
+        try{
         while(true){
             n = Console.ReadLine();
             if(n == "-1") break;
             T i = (T)Convert.ChangeType(n,typeof(T));
             L1.Add(i);
+        } } catch{
+            Console.WriteLine("Неверные данные");
         }
         List<T> L2 = new List<T>();
-        Console.WriteLine("Ввод для L2");
+        Console.WriteLine("Ввод для L2, введите -1 чтобы остановиться");
         n = "";
+        try{
         while(true){
             n = Console.ReadLine();
             if(n == "-1") break;
             T i = (T)Convert.ChangeType(n,typeof(T));
             L2.Add(i);
+        }}catch{
+            Console.WriteLine("Неверные данные");
         }
         
         List<T> L3 = uniqu(L1, L2);
@@ -65,8 +72,8 @@ class Program{
         return L3;
     }
     //задание 2
-    public static void two<T>() {
-    LinkedList<T> d = new LinkedList<T>();
+        public static void two<T>() {
+        LinkedList<T> d = new LinkedList<T>();
         string n = "";
         int max = 0;
         int min = 99999;
@@ -103,6 +110,7 @@ class Program{
         int jmin = 0;
         int index = 1;
         int fmin = 9999;
+        int fmax = -9999;
         LinkedListNode<T> temp = d;
         
         while (node != null)
@@ -115,8 +123,9 @@ class Program{
                 min = node;
                 jmin = index;
             }
-            if (num > int.Parse(max.Value.ToString())) 
+            if (num > fmax) 
             {
+                fmax = num;
                 max = node;
                 imax = index;
             }
@@ -150,21 +159,24 @@ class Program{
             new HashSet<string>{"Шоу 3","Шоу 2","Шоу 1"},
             new HashSet<string>{"Шоу 4","Шоу 2","Шоу 6"} 
         };
-        HashSet<string> allliked = new HashSet<string>(third[0]);
+        HashSet<string> allliked = new HashSet<string>(third[0]);   
         HashSet<string> someliked = new HashSet<string>();
         HashSet<string> noneliked = new HashSet<string>{"Шоу 1", "Шоу 2", "Шоу 3", "Шоу 4", "Шоу 5", "Шоу 6"};
         foreach(HashSet<string> i in third){
             allliked.IntersectWith(i);
         }
+        //Console.WriteLine();
         foreach(string i in allliked){
             Console.Write("Шоу, которые всем нравятся: " + i + " ");
         }
-        //Console.WriteLine();
+        Console.WriteLine();
         foreach(HashSet<string> i in third){
             foreach(string j in i){
                 someliked.Add(j);
             }
         }
+        someliked.RemoveWhere(item => allliked.Contains(item));
+
         Console.Write("Шоу, которые нравятся некоторым: ");
         foreach(string i in someliked){
             Console.Write(i + " ");
@@ -215,31 +227,66 @@ class Program{
     //задание 5
     public static void TouchXML(List<Person> peoples)
     {
-        Console.WriteLine("Вводите людей в формате: Фамилия Имя ДД.ММ.ГГГГ, чтобы остановиться - '-1'");
+        Console.WriteLine("Вводим людей) <фамилия><имя><дата рождения> чтобы остановиться - '-1'");
+        try{
         while (true)
         {
             string input = Console.ReadLine();
             if (input == "-1") break;
-            Console.WriteLine($"че за хуйня {input}");
-            string[] par = input.Split(" ");
-            Console.WriteLine($"че за хуйня {par[0]}  {par[1]}");
+
+            string[] par = input.Split(' ');
             if (par.Length == 3 && DateTime.TryParseExact(par[2], "dd.MM.yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime birthd))
             {
-                Person peopl = new Person(par[0], par[1], birthd);
-                Console.WriteLine($"Добавлен: {par[0]} {par[1]} {birthd.ToShortDateString()}");
+                Person peopl = new Person(par[0], par[1], birthd.ToString("dd.MM.yyyy"));
                 peoples.Add(peopl);
             }
             else
             {
-                Console.WriteLine("Неверный ввод. Пожалуйста, используйте формат: Фамилия Имя ДД.ММ.ГГГГ.");
+                Console.WriteLine("Неверный ввод");
             }
+        }}catch{
+            Console.WriteLine("Неверные данные");
         }
 
-        Console.WriteLine("Сериализация в XML...");
+        Console.WriteLine("сериализуем");
         using (FileStream fs = new FileStream("people.xml", FileMode.OpenOrCreate))
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Person>));
             xmlSerializer.Serialize(fs, peoples);
         }
+    }
+    public static void fifth(){
+        List<Person> people = new List<Person>();
+        using(FileStream fs = new FileStream("people.xml", FileMode.Open)){
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Person>));
+            people = (List<Person>)xmlSerializer.Deserialize(fs);
+        }
+        if(people.Count > 0){
+        Person older = people[0];
+        string birth = older.Birth;
+        int count = 0;
+        foreach(var i in people){
+            if(birth == i.Birth){
+                count++;
+            } else{
+                string[] one = birth.Split('.');
+                string[] two = i.Birth.Split('.');
+                for(int j = one.Length-1; j > 0; j--){
+                    if(Convert.ToInt32(one[j]) > Convert.ToInt32(two[j])){
+                        older = i;
+                        birth = i.Birth;
+                        count = 0;
+                        count = 1;
+                        break;
+                    }
+                }
+            }
+        }
+        if(count > 1){
+            Console.WriteLine(count);
+        } else {
+            Console.WriteLine(older.ToString());
+        }
+        } 
     }
 }
