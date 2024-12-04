@@ -101,7 +101,10 @@ class Courses{
                               where Courses.Id == id
                               select Courses).FirstOrDefault();
         if(valuesToUp != null){
-            if(valuesToUp.Code != inp[1]){
+            bool k = (from Courses in instance 
+                      where Courses.Code == inp[1]
+                      select Courses).Any();
+            if(!k){
                 valuesToUp.Code = inp[1];
                 valuesToUp.Course = course;
                 valuesToUp.Name = name;
