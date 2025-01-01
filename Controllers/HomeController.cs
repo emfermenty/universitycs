@@ -9,10 +9,10 @@ namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
-        PostContext db = new PostContext();
+        DataBaseContext db = new DataBaseContext();
         public ActionResult index()
         {
-            IEnumerable<Post> = db.Posts;
+            //IEnumerable<Post> = db.Posts;
             
             return View();
         }
