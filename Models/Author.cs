@@ -4,4 +4,3 @@
     public int ratings { get; set; }
     public ICollection<Post> Posts { get; set; }
 }
-

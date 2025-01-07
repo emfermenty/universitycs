@@ -8,8 +8,9 @@
         foreach (var news in Model)
         {
             <li>
-                <h2>@news.Name</h2>
+                <h2 style="display: inline;">@news.Id - @news.Name</h2>
                 <p>@news.Description</p>
+                <a href="@Url.Action("Delete", "News", new { id = news.Id })" onclick="return confirm('Вы уверены, что хотите удалить эту новость?');">Удалить</a>
             </li>
         }
     }
