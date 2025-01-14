@@ -2,18 +2,26 @@
 
 public class CategoryController : Controller
 {
+    private readonly ApplicationContext _context;
+    public CategoryController(ApplicationContext context)
+    {
+        _context = context;
+    }
     public IActionResult Index()
     {
-        return View(HomeController.categories);
+        var categories = _context.Categories.ToList();
+        return View(categories);
     }
 
     [HttpGet]
     public IActionResult Delete(int id)
     {
-        var remove = HomeController.categories.FirstOrDefault(n => n.Id == id);
-        if (remove != null)
+        var category = _context.Categories.Find(id);
+        //var remove = HomeController.categories.FirstOrDefault(n => n.Id == id);
+        if (category != null)
         {
-            HomeController.categories.Remove(remove);
+            _context.Categories.Remove(category);
+            _context.SaveChanges();
         }
         return RedirectToAction("Index", "Home");
     }
@@ -29,17 +37,16 @@ public class CategoryController : Controller
     {
         if (ModelState.IsValid)
         {
-            cate.Id = HomeController.categories.Count > 0 ? HomeController.categories.Max(n => n.Id) + 1 : 1;
-            HomeController.categories.Add(cate);
+            _context.Categories.Add(cate);
+            _context.SaveChanges();
             return RedirectToAction("Index", "Category");
         }
         return View(cate);
     }
-
     public IActionResult Posts(int categoryId)
     {
-        var postsInCategory = HomeController.newsList.Where(p => p.Categoryid == categoryId).ToList();
-        ViewBag.CategoryId = categoryId; // Передаем идентификатор категории в представление
-        return View(postsInCategory);
+        var postsincategory = _context.Posts.Where(p => p.Categoryid == categoryId).ToList();
+        ViewBag.CategoryId = categoryId; 
+        return View(postsincategory);
     }
 }

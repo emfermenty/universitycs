@@ -10,7 +10,7 @@
             <li>
                 <h2 style="display: inline;">@news.Id - @news.Name</h2>
                 <p>
-                    @(news.Description.Length > 2 ? news.Description.Substring(0, 2) + "..." : news.Description)
+                    @(news.Description.Length > 2 ? news.Description.Substring(0, 40) + "..." : news.Description)
                 </p> 
                 <a href="@Url.Action("Details", "Post", new { id = news.Id })">Читать полностью</a> 
                 <a href="@Url.Action("Delete", "Post", new { id = news.Id })" onclick="return confirm('Вы уверены, что хотите удалить эту новость?');">Удалить</a>

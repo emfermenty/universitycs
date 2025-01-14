@@ -7,8 +7,14 @@ namespace WebApplication1.Controllers
 {
     public class AuthorController : Controller
     {
-        public ActionResult Index() {  
-            return View(HomeController.authors); 
+        private readonly ApplicationContext _context;
+        public AuthorController(ApplicationContext context)
+        {
+            _context = context;
+        }
+        public ActionResult Index() {
+            var author = _context.Authors.ToList();
+            return View(author); 
         }
         public ActionResult Details(int id)
         {
@@ -25,35 +31,56 @@ namespace WebApplication1.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult Create(Author author)
         {
             if (ModelState.IsValid)
             {
-                author.id = HomeController.authors.Count > 0 ? HomeController.authors.Max(n => n.id) + 1 : 1;
-                HomeController.authors.Add(author);
-                return RedirectToAction("Index", "Author");
+                _context.Authors.Add(author);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
             }
             return View(author);
         }
+
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var remove = HomeController.authors.FirstOrDefault(n => n.id == id);
-            if (remove != null)
+            var author = _context.Authors.FirstOrDefault(a => a.id == id);
+            if (author != null)
             {
-                HomeController.authors.Remove(remove);
+                _context.Authors.Remove(author);
+                _context.SaveChanges();
             }
-            return RedirectToAction("Index", "Author");
+            return RedirectToAction("Index");
         }
 
-        public ActionResult Edit(int id)
+        [HttpGet]
+        public IActionResult Edit(int id)
         {
-            return View();
+            var author = _context.Authors.FirstOrDefault(a => a.id == id);
+            if (author == null)
+            {
+                return NotFound();
+            }
+            return View(author);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Author author)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Authors.Update(author);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(author);
         }
         private Author GetAuthorId(int id)
         {
-            Author author = HomeController.authors.FirstOrDefault(a => a.id == id);
+            Author author = _context.Authors.FirstOrDefault(a => a.id == id);
             return author;
         }
     }

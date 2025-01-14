@@ -1,31 +1,40 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Linq;
+using WebApplication1.Models;
 
 [Controller]
 public class PostController : Controller
 {
+    private readonly ApplicationContext _context;
+
+    public PostController(ApplicationContext context)
+    {
+        _context = context;
+    }
+
     public IActionResult Index()
     {
-        return View(HomeController.newsList);
+        var posts = _context.Posts.ToList(); 
+        return View(posts);
     }
 
     [HttpGet]
     public IActionResult Delete(int id)
     {
-        var remove = HomeController.newsList.FirstOrDefault(n => n.Id == id);
-        if (remove != null)
+        var post = _context.Posts.FirstOrDefault(n => n.Id == id); 
+        if (post != null)
         {
-            HomeController.newsList.Remove(remove);
+            _context.Posts.Remove(post); 
+            _context.SaveChanges(); 
         }
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("Index");
     }
 
     [HttpGet]
     public IActionResult Create()
     {
-        ViewBag.Authors = HomeController.authors;
-        ViewBag.Categories = HomeController.categories;
+        ViewBag.Authors = _context.Authors.ToList(); 
+        ViewBag.Categories = _context.Categories.ToList(); 
         return View();
     }
 
@@ -34,29 +43,29 @@ public class PostController : Controller
     {
         if (ModelState.IsValid)
         {
-            post.Id = HomeController.newsList.Count > 0 ? HomeController.newsList.Max(n => n.Id) + 1 : 1;
             post.Authorid = selectedAuthorId;
-            post.Categoryid = selectedCategoryId;
-            HomeController.newsList.Add(post);
-            return RedirectToAction("Index", "Post");
+            post.Categoryid = selectedCategoryId; 
+            _context.Posts.Add(post); 
+            _context.SaveChanges(); 
+            return RedirectToAction("Index");
         }
 
-        ViewBag.Authors = HomeController.authors;
-        ViewBag.Categories = HomeController.categories;
+        ViewBag.Authors = _context.Authors.ToList(); 
+        ViewBag.Categories = _context.Categories.ToList(); 
         return View(post);
     }
 
     [HttpGet]
     public IActionResult Details(int id)
     {
-        var post = HomeController.newsList.FirstOrDefault(h => h.Id == id);
+        var post = _context.Posts.FirstOrDefault(h => h.Id == id); 
         if (post == null)
         {
             return NotFound();
         }
 
-        ViewBag.Authors = HomeController.authors;
-        ViewBag.Categories = HomeController.categories;
+        ViewBag.Authors = _context.Authors.ToList();
+        ViewBag.Categories = _context.Categories.ToList(); 
         return View(post);
     }
 }
