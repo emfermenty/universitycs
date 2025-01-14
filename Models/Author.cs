@@ -1,6 +1,47 @@
 ﻿public class Author{
-    public int id { get; set; }
-    public string name { get; set; }
-    public int ratings { get; set; }
-    public ICollection<Post> Posts { get; set; }
+    private int _id;
+    public int id
+    {
+        get
+        {
+            return _id;
+        }
+        set
+        {
+            _id = value;
+        }
+    }
+    private string _name;
+    public string name
+    {
+        get
+        {
+            return _name;
+        }
+        set
+        {
+            _name = value;
+        }
+    }
+    private string _biography;
+    public string biography
+    {
+        get
+        {
+            return _biography;
+        }
+        set
+        {
+            _biography = value;
+        }
+    }
+    public Author()
+    {
+    }
+    public Author(int id, string name, string biography)
+    {
+        this._id = id;
+        this._name = name;
+        this._biography = biography;
+    }
 }

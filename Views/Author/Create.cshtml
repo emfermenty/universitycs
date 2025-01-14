@@ -1,0 +1,33 @@
+﻿@model Author
+
+@{
+    ViewData["Title"] = "Создание Автора";
+}
+
+<h2>Создание новости</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="name" class="control-label"></label>
+        <input asp-for="name" class="form-control" />
+        <span asp-validation-for="name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="biography" class="control-label"></label>
+        <textarea asp-for="biography" class="form-control"></textarea>
+        <span asp-validation-for="biography" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Создать" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Назад к списку новостей</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,16 +1,81 @@
 ﻿using System.Numerics;
 public class Post{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    //public Author Author { get; set; }
-    public int post_rating {  get; set; }
-    //public ICollection<PostCategoryes> posts_category { get; set; }
-    public Post(int id, string name, string description, int rating)
+    private int _Id;
+    public int Id
     {
-        this.Id = id;
-        this.Name = name;
-        this.Description = description;
-        this.post_rating = rating;
+        get
+        {
+            return _Id;
+        }
+        set
+        {
+            _Id = value;
+        }
+    }
+    private string _name;
+    public string Name
+    {
+        get
+        {
+            return _name;
+        }
+        set
+        {
+            _name = value;
+        }
+    }
+    private string _description;
+    public string Description
+    {
+        get
+        {
+            return _description;
+        }
+        set
+        {
+            _description = value;
+        }
+    }
+    private int _authorid;
+    public int Authorid
+    {
+        get
+        {
+            return _authorid;
+        }
+        set
+        {
+            _authorid = value;
+        }
+    }
+    private int _categoryid;
+    public int Categoryid
+    {
+        get { return _categoryid; }
+        set { _categoryid = value; }
+    }
+    private int _post_rating;
+    public int post_rating
+    {
+        get
+        {
+            return _post_rating;
+        }
+        set
+        {
+            _post_rating = value;
+        }
+    }
+    public Post()
+    {
+    }
+    public Post(int id, string name, string description, int authorid, int rating, int categoryid)
+    {
+        this._Id = id;
+        this._name = name;
+        this._description = description;
+        this._post_rating = rating;
+        this._authorid = authorid;
+        this._categoryid = categoryid;
     }
 }

@@ -1,0 +1,60 @@
+﻿@model Post
+
+@{
+    ViewData["Title"] = "Создание поста";
+}
+
+<h2>Создание поста</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="post_rating" class="control-label"></label>
+        <input asp-for="post_rating" class="form-control" type="number" min="0" max="5" />
+        <span asp-validation-for="post_rating" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="selectedAuthorId" class="control-label">Автор</label>
+        <select name="selectedAuthorId" class="form-control">
+            <option value="">Выберите автора</option>
+            @foreach (var author in ViewBag.Authors)
+            {
+                <option value="@author.id">@author.name</option>
+            }
+        </select>
+        <span asp-validation-for="Authorid" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="selectedCategoryId" class="control-label">Категория</label>
+        <select name="selectedCategoryId" class="form-control">
+            <option value="">Выберите категорию</option>
+            @foreach (var category in ViewBag.Categories)
+            {
+                <option value="@category.Id">@category.Category_Name</option>
+            }
+        </select>
+        <span asp-validation-for="Categoryid" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Создать" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Назад к списку постов</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,24 @@
+﻿@model List<Author>
+
+<h1>Наши авторы</h1>
+<a href="/author/Create">Добавить автора</a>
+<ul>
+    @if (Model != null && Model.Any())
+    {
+        foreach (var authors in Model)
+        {
+            <li>
+                <h2 style="display: inline;">@authors.id - @authors.name</h2>
+                <p>
+                    @(authors.biography.Length > 2 ? authors.biography.Substring(0, 2) + "..." : authors.biography)
+                </p>
+                <a href="@Url.Action("Details", "Author", new { id = authors.id })">Читать полностью</a> 
+                <a href="@Url.Action("Delete", "Author", new { id = authors.id })" onclick="return confirm('Вы уверены, что хотите удалить эту новость?');">Удалить</a>
+            </li>
+        }
+    }
+    else
+    {
+        <li>Нет новостей для отображения.</li>
+    }
+</ul>

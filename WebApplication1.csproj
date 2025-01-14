@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
     <PackageReference Include="Npgsql" Version="9.0.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.2" />
   </ItemGroup>
@@ -22,10 +23,6 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Create.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Create.cshtml" />
   </ItemGroup>
 
 </Project>

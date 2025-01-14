@@ -1,0 +1,37 @@
+﻿@model Post
+
+@{
+    ViewData["Title"] = "Детали поста";
+    var authors = ViewBag.Authors as List<Author>;
+    var author = authors?.FirstOrDefault(a => a.id == Model.Authorid);
+    var categoryes = ViewBag.Categories as List<Category>;
+    var category = categoryes?.FirstOrDefault(b => b.Id == Model.Categoryid);
+}
+
+<h1>@Model.Name</h1>
+<p>@Model.Description</p>
+<p>Рейтинг: @Model.post_rating</p>
+<p>
+    Автор:
+    @if (author != null)
+    {
+        <a href="@Url.Action("Details", "Author", new { id = author.id })">@author.name</a>;
+    }
+    else
+    {
+        <span>Неизвестный автор</span>;
+    }
+</p>
+<p>
+    Категория:
+    @if (category != null)
+    {
+        <a href="@Url.Action("Index", "Category", new { Id = category.Id })">@category.Category_Name</a>;
+        ;
+    }
+    else
+    {
+        <span>Неизвестная категория</span>;
+    }
+</p>
+<a href="@Url.Action("Index", "Post")">Назад к списку новостей</a>

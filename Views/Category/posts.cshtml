@@ -1,0 +1,29 @@
+﻿@model List<Post>
+
+@{
+    ViewData["Title"] = "Посты по категории";
+}
+
+<h2>Посты по категории</h2>
+
+@if (Model != null && Model.Any())
+{
+    <ul>
+        @foreach (var post in Model)
+        {
+            <li>
+                <a asp-action="Details" asp-controller="Post" asp-route-id="@post.Id">@post.Name</a>
+                <p>@post.Description</p>
+                <p>Рейтинг: @post.post_rating</p>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Нет постов в этой категории.</p>
+}
+
+<div>
+    <a asp-action="Index">Назад к списку категорий</a>
+</div>

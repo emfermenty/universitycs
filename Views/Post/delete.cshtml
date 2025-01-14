@@ -1,3 +1,31 @@
 ﻿@model List<Post>
 
-<h1>Удаление</h1>
+@{
+    ViewData["Title"] = "News List";
+}
+
+<h1>Удаление новости</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Description</td>
+                <td>
+                    <a href="@Url.Action("Delete", "Post", new { id = item.Id })" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("Create", "Post")" class="btn btn-primary">Create New</a>

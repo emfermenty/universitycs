@@ -1,15 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 [Controller]
 public class HomeController : Controller
 {
+    static Category drama = new Category(1, "drama");
+    static Category kriminal = new Category(2, "kriminal");
+    static Author Dima = new Author(1, "dima", "krytoi");
+    static Author shabit = new Author(2, "Хапаев Шабит", "nekrytoi");
+    public static List<Category> categories = new List<Category> { drama, kriminal };
+    public static List<Author> authors = new List<Author>{ Dima, shabit, };
     public static List<Post> newsList = new List<Post>
     {
-        new Post(1, "one", "two", 3),
-        new Post(2, "two", "three", 5),
-        new Post(3, "three", "four", 7),
+        new Post(1, "one", "two", 1, 3, 1),
+        new Post(2, "two", "three", 1, 5, 2),
+        new Post(3, "three", "four", 2, 7, 1)
     };
 
     public IActionResult Index()
@@ -27,37 +34,12 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult Create(Post news)
     {
-        if (ModelState.IsValid) // Проверка на валидность модели
+        if (ModelState.IsValid)
         {
             news.Id = newsList.Count + 1;
             newsList.Add(news);
             return RedirectToAction("Index");
         }
-        return View(news); // Если модель не валидна, возвращаем ту же форму
+        return View(news);
     }
 }
-
-
-
-
-/*
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using WebApplication1.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace WebApplication1.Controllers
-{
-    public class HomeController : Controller
-    {
-        DataBaseContext db = new DataBaseContext();
-        public ActionResult index()
-        {
-            
-            
-            return View();
-        }
-    }
-}*/
