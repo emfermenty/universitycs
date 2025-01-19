@@ -1,0 +1,37 @@
+﻿case 3:
+    Console.Write("Введите id фильма для изменения: ");
+    int filmIdToUpdate = int.Parse(Console.ReadLine());
+    
+    var filmToUpdate = context.Films.Include(f => f.Actors).FirstOrDefault(f => f.FilmId == filmIdToUpdate);
+    if (filmToUpdate != null) {
+        Console.Write("Введите новое название фильма: ");
+        filmToUpdate.Title = Console.ReadLine();
+
+        Console.Write("Введите новый id жанра: ");
+        int newGenreId = int.Parse(Console.ReadLine());
+        var newGenre = context.Genres.Find(newGenreId);
+        if (newGenre != null) {
+            filmToUpdate.Genre = newGenre;
+        } else {
+            Console.WriteLine("Жанр не найден.");
+        }
+
+        Console.WriteLine("Введите новые id актеров (через запятую): ");
+        var newActorIds = Console.ReadLine().Split(',').Select(id => int.Parse(id.Trim()));
+
+        filmToUpdate.Actors.Clear(); // Удаляем старых актеров
+        foreach (var actorId in newActorIds) {
+            var actor = context.Actors.Find(actorId);
+            if (actor != null) {
+                filmToUpdate.Actors.Add(actor);
+            } else {
+                Console.WriteLine($"Актер с id {actorId} не найден.");
+            }
+        }
+
+        context.SaveChanges();
+        Console.WriteLine("Данные фильма обновлены.");
+    } else {
+        Console.WriteLine("Фильм не найден.");
+    }
+    break;
