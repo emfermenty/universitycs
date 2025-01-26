@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -6,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DBIKM.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,76 +16,82 @@ namespace DBIKM.Migrations
                 name: "Actors",
                 columns: table => new
                 {
-                    ActorId = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    Name = table.Column<string>(type: "character varying(70)", nullable: false),
+                    BirthDay = table.Column<DateTime>(type: "date", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Actors", x => x.ActorId);
+                    table.PrimaryKey("PK_Actors", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Genres",
                 columns: table => new
                 {
-                    GenreId = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<short>(type: "smallint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Genres", x => x.GenreId);
+                    table.PrimaryKey("PK_Genres", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Films",
                 columns: table => new
                 {
-                    FilmId = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "text", nullable: false),
-                    GenreId = table.Column<int>(type: "integer", nullable: false)
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Year = table.Column<short>(type: "smallint", nullable: false),
+                    Duration = table.Column<TimeSpan>(type: "interval", nullable: true),
+                    CashCollection = table.Column<decimal>(type: "numeric", nullable: true),
+                    Grade = table.Column<float>(type: "real", nullable: true),
+                    eighteenplus = table.Column<bool>(type: "boolean", nullable: true),
+                    GenreId = table.Column<short>(type: "smallint", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Films", x => x.FilmId);
+                    table.PrimaryKey("PK_Films", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Films_Genres_GenreId",
                         column: x => x.GenreId,
                         principalTable: "Genres",
-                        principalColumn: "GenreId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "ActorFilm",
+                name: "ActorFilms",
                 columns: table => new
                 {
-                    ActorsActorId = table.Column<int>(type: "integer", nullable: false),
-                    FilmsFilmId = table.Column<int>(type: "integer", nullable: false)
+                    ActorId = table.Column<long>(type: "bigint", nullable: false),
+                    FilmId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ActorFilm", x => new { x.ActorsActorId, x.FilmsFilmId });
+                    table.PrimaryKey("PK_ActorFilms", x => new { x.ActorId, x.FilmId });
                     table.ForeignKey(
-                        name: "FK_ActorFilm_Actors_ActorsActorId",
-                        column: x => x.ActorsActorId,
+                        name: "FK_ActorFilms_Actors_ActorId",
+                        column: x => x.ActorId,
                         principalTable: "Actors",
-                        principalColumn: "ActorId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ActorFilm_Films_FilmsFilmId",
-                        column: x => x.FilmsFilmId,
+                        name: "FK_ActorFilms_Films_FilmId",
+                        column: x => x.FilmId,
                         principalTable: "Films",
-                        principalColumn: "FilmId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ActorFilm_FilmsFilmId",
-                table: "ActorFilm",
-                column: "FilmsFilmId");
+                name: "IX_ActorFilms_FilmId",
+                table: "ActorFilms",
+                column: "FilmId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Films_GenreId",
@@ -96,7 +103,7 @@ namespace DBIKM.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ActorFilm");
+                name: "ActorFilms");
 
             migrationBuilder.DropTable(
                 name: "Actors");

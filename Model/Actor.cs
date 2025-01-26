@@ -1,21 +1,21 @@
-﻿public class Actor
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+public class Actor
 {
-    private int _ActorId;
-    public int ActorId
-    {
-        get { return _ActorId; }
-        set { _ActorId = value; }
-    }
-    private string _Name;
-    public string Name
-    {
-        get { return _Name; }
-        set { _Name = value; }
-    }
-    private ICollection<Film> _Films { get; set; } = new List<Film>();
-    public ICollection<Film> Films
-    {
-        get { return _Films; }
-        set { _Films = value; }
-    }
+    [Key]
+    public long Id { get; set; } 
+
+    [Column(TypeName = "character varying(70)")] 
+    public string Name { get; set; } 
+
+    [Column(TypeName = "date")] 
+    public DateTime BirthDay { get; set; } 
+
+    public ICollection<ActorFilm> ActorFilms { get; set; } = new List<ActorFilm>(); 
+    //public Actor(string name, DateTime birthday)
+    //{
+     //   this.Name = name;
+      //  this.BirthDay = birthday;
+    //}
 }

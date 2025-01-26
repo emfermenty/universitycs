@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DBIKM")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5af816a1c9a37d6de20299f6b2d9f9ea4305d7db")]
 [assembly: System.Reflection.AssemblyProductAttribute("DBIKM")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DBIKM")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
